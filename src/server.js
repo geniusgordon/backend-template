@@ -1,19 +1,36 @@
-import app from './app';
-import { connectDb, disconnectDb } from './db';
-import { port } from './config';
+import { createServer } from 'http';
+import app from './core/app';
+import logger from './core/logger';
+import { connectDb, disconnectDb } from './core/db';
+import { port } from './core/config';
 
-/* eslint-disable no-console */
-connectDb().then(() => {
-  return new Promise((resolve, reject) => {
-    const server = app.listen(port);
-    server.on('listening', () => {
-      console.log(`listening on port: ${port}`);
-    });
-    server.on('error', (err) => {
-      reject(err);
-    });
+const server = createServer(app);
+
+export function start() {
+  return connectDb().then(() =>
+    new Promise((resolve, reject) => {
+      server.listen(port);
+      server.on('listening', () => {
+        logger.info(`listening on port: ${port}`);
+        resolve();
+      });
+      server.on('error', (err) => {
+        reject(err);
+      });
+    })
+  );
+}
+
+export function stop() {
+  disconnectDb().then(() => {
+    server.close();
   });
-}).catch((err) => {
-  console.log(err);
-}).then(disconnectDb);
+}
+
+if (require.main === module) {
+  start().catch((err) => {
+    logger.error(err);
+    stop();
+  });
+}
 

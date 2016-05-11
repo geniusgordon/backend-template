@@ -1,5 +1,5 @@
 import { sign, verify } from 'jsonwebtoken';
-import { jwtSecret } from '../config';
+import { jwtSecret } from '../core/config';
 
 export function generateToken(user) {
   return new Promise((resolve, reject) => {
