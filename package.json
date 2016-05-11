@@ -5,9 +5,9 @@
   "scripts": {
     "compile": "babel src -d dist",
     "prestart": "npm run compile",
-    "start": "node dist/server.js",
-    "start:watch": "nodemon --exec babel-node src/server.js",
-    "test": "mocha --compilers js:babel-core/register --recursive",
+    "start": "export NODE_ENV=development && node dist/server.js",
+    "start:watch": "export NODE_ENV=development && nodemon --exec babel-node src/server.js",
+    "test": "export NODE_ENV=test && mocha --compilers js:babel-core/register --recursive",
     "posttest": "npm run lint",
     "lint": "eslint ./src"
   },
@@ -32,7 +32,6 @@
     "eslint-config-airbnb-base": "^3.0.0",
     "eslint-plugin-import": "^1.7.0",
     "mocha": "^2.4.5",
-    "nodemon": "^1.9.2",
-    "supertest": "^1.2.0"
+    "nodemon": "^1.9.2"
   }
 }
