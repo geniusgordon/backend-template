@@ -15,7 +15,7 @@ app.use(router);
 
 /* eslint-disable no-unused-vars */
 app.use((err, req, res, next) => {
-  res.status(500).json({
+  res.status(400).json({
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ?
       '' : err.stack.split('\n'),

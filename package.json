@@ -5,8 +5,8 @@
   "scripts": {
     "compile": "babel src -d dist",
     "prestart": "npm run compile",
-    "start": "export NODE_ENV=development && node dist/server.js",
-    "start:watch": "export NODE_ENV=development && nodemon --exec babel-node src/server.js",
+    "start": "node dist/server.js",
+    "start:watch": "nodemon --exec babel-node src/server.js",
     "test": "export NODE_ENV=test && mocha --compilers js:babel-core/register --recursive",
     "posttest": "npm run lint",
     "lint": "eslint ./src"
