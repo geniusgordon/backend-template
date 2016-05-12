@@ -4,7 +4,7 @@ export function getAllUsers() {
   return User.find({});
 }
 
-function validateInput(username) {
+function checkUserExist(username) {
   return User.findOne({ username }).then((user) => {
     if (user) {
       throw new Error(`user "${username}" exists`);
@@ -13,7 +13,7 @@ function validateInput(username) {
 }
 
 export function createNewUser(username, password) {
-  return validateInput(username, password).then(() => {
+  return checkUserExist(username).then(() => {
     const user = new User({
       username,
       password: generateHash(password),

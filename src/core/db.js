@@ -3,7 +3,7 @@ import { dbUrl } from './config';
 
 export function connectDb() {
   return new Promise((resolve, reject) => {
-    mongoose.connect(dbUrl, (err) => {
+    mongoose.connect(dbUrl[process.env.NODE_ENV], (err) => {
       if (err) {
         reject(err);
       } else {

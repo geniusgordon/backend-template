@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getAllUsers, createNewUser, login } from '../controllers/user';
 import { generateToken } from '../controllers/auth';
+import { validateString } from '../core/utils';
 
 const userRouter = new Router();
 
@@ -16,6 +17,8 @@ userRouter.get('/', (req, res, next) => {
 
 userRouter.post('/create', (req, res, next) => {
   const { username, password } = req.body;
+  validateString('username', username, { required: true });
+  validateString('password', password, { required: true });
   createNewUser(username.trim(), password.trim())
   .then((user) => generateToken(user))
   .then((token) => {
@@ -31,6 +34,8 @@ userRouter.post('/create', (req, res, next) => {
 
 userRouter.post('/login', (req, res, next) => {
   const { username, password } = req.body;
+  validateString('username', username, { required: true });
+  validateString('password', password, { required: true });
   login(username.trim(), password.trim())
   .then((user) => generateToken(user))
   .then((token) => {
