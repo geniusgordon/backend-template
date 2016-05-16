@@ -1,7 +1,7 @@
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
-import bearerToken from '../middlewares/bearer-token';
+import { bearerToken } from '../middlewares/auth';
 import router from '../routes';
 
 const app = express();
@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bearerToken());
+app.use(bearerToken);
 
 app.use(router);
 

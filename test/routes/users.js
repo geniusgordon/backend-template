@@ -12,6 +12,8 @@ if (process.env.NODE_ENV !== 'test') {
 const host = `http://localhost:${port}`;
 
 describe('User route', () => {
+  let token;
+
   before(() => {
     return start().then(() => {
       return User.remove({});
@@ -59,6 +61,7 @@ describe('User route', () => {
       .then(({ data }) => {
         expect(data.success).to.be.true;
         expect(data.token).to.be.a('string');
+        token = data.token;
       });
     });
 
@@ -72,6 +75,28 @@ describe('User route', () => {
 
     it('should get a password incorrect error', () => {
       return postWithError(url, { username: 'x', password: 'xxx' });
+    });
+  });
+
+  describe('GET /users/me', () => {
+    const url = `${host}/users/me`;
+
+    it('should get an unauthorized error', () => {
+      return axios(url, {
+        validateStatus: null,
+      }).then(({ status, data }) => {
+        expect(status).to.equal(400);
+        expect(data.message).to.be.a('string');
+      });
+    });
+
+    it('should get user infomation', () => {
+      return axios(url, {
+        headers: { authorization: `Bearer ${token}` },
+      })
+      .then(({ data }) => {
+        expect(data.username).to.equal('x');
+      });
     });
   });
 });

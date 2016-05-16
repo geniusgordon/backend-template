@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getAllUsers, createNewUser, login } from '../controllers/user';
-import { generateToken } from '../controllers/auth';
+import { generateToken, verifyToken } from '../controllers/auth';
+import { loginRequired } from '../middlewares/auth';
 import { validateString } from '../core/utils';
 
 const userRouter = new Router();
@@ -43,6 +44,16 @@ userRouter.post('/login', (req, res, next) => {
       success: true,
       token,
     });
+  })
+  .catch((err) => {
+    next(err);
+  });
+});
+
+userRouter.get('/me', loginRequired, (req, res, next) => {
+  verifyToken(req.token)
+  .then((user) => {
+    res.status(200).json(user);
   })
   .catch((err) => {
     next(err);
