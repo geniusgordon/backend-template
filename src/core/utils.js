@@ -1,9 +1,11 @@
+import { Http400Error } from './error';
+
 export function validateString(fieldname, value, options = {}) {
   if (typeof value !== 'string') {
-    throw new Error(`${fieldname} should be a string`);
+    throw new Http400Error(`${fieldname} should be a string`);
   }
   if (options.required && value.trim().length === 0) {
-    throw new Error(`${fieldname} should not be empty`);
+    throw new Http400Error(`${fieldname} should not be empty`);
   }
 }
 

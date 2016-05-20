@@ -45,11 +45,11 @@ describe('User route', () => {
     });
 
     it('should get an empty field error', () => {
-      return postWithError(url, {});
+      return postWithError(url, {}, 400);
     });
 
     it('should get an user exists error', () => {
-      return postWithError(url, { username: 'x', password: '123' });
+      return postWithError(url, { username: 'x', password: '123' }, 400);
     });
   });
 
@@ -66,15 +66,15 @@ describe('User route', () => {
     });
 
     it('should get an empty field error', () => {
-      return postWithError(url, {});
+      return postWithError(url, {}, 400);
     });
 
     it('should get an user not exist error', () => {
-      return postWithError(url, { username: 'xxx', password: 'xxx' });
+      return postWithError(url, { username: 'xxx', password: 'xxx' }, 400);
     });
 
     it('should get a password incorrect error', () => {
-      return postWithError(url, { username: 'x', password: 'xxx' });
+      return postWithError(url, { username: 'x', password: 'xxx' }, 400);
     });
   });
 

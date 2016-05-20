@@ -2,6 +2,7 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import { bearerToken } from '../middlewares/auth';
+import { errorHandler } from '../middlewares/error';
 import router from '../routes';
 
 const app = express();
@@ -14,16 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bearerToken);
 
 app.use(router);
-
-/* eslint-disable no-unused-vars */
-app.use((err, req, res, next) => {
-  res.status(400).json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ?
-      '' : err.stack.split('\n'),
-  });
-});
-/* eslint-enable no-unused-vars */
+app.use(errorHandler);
 
 app.use((req, res) => {
   res.status(404).json({
