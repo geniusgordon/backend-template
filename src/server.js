@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import { createServer } from 'http';
 import app from './core/app';
 import logger from './core/logger';

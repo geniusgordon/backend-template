@@ -5,33 +5,31 @@ export function getAllUsers() {
   return User.find({});
 }
 
-function checkUserExist(username) {
-  return User.findOne({ username }).then((user) => {
-    if (user) {
-      throw new Http400Error(`user "${username}" exists`);
-    }
-  });
+async function checkUserExist(username) {
+  const user = await User.findOne({ username });
+  if (user) {
+    throw new Http400Error(`user "${username}" exists`);
+  }
 }
 
-export function createNewUser(username, password) {
-  return checkUserExist(username).then(() => {
-    const user = new User({
-      username,
-      password: generateHash(password),
-    });
-    return user.save();
+export async function createNewUser(username, password) {
+  await checkUserExist(username);
+  const user = new User({
+    username,
+    password: generateHash(password),
   });
+  await user.save();
+  return user;
 }
 
-export function login(username, password) {
-  return User.findOne({ username }).then((user) => {
-    if (!user) {
-      throw new Http400Error(`user "${username}" doesn't exist`);
-    }
-    if (!validatePassword(password, user.password)) {
-      throw new Http400Error('password incorrect');
-    }
-    return user;
-  });
+export async function login(username, password) {
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new Http400Error(`user "${username}" doesn't exist`);
+  }
+  if (!validatePassword(password, user.password)) {
+    throw new Http400Error('password incorrect');
+  }
+  return user;
 }
 

@@ -6,58 +6,56 @@ import { validateString } from '../core/utils';
 
 const userRouter = new Router();
 
-userRouter.get('/', (req, res, next) => {
-  getAllUsers().then((users) => {
+userRouter.get('/', async (req, res, next) => {
+  try {
+    const users = await getAllUsers();
     res.status(200).json({
       users,
     });
-  }).catch((err) => {
+  } catch (err) {
     next(err);
-  });
+  }
 });
 
-userRouter.post('/create', (req, res, next) => {
+userRouter.post('/signup', async (req, res, next) => {
   const { username, password } = req.body;
-  validateString('username', username, { required: true });
-  validateString('password', password, { required: true });
-  createNewUser(username.trim(), password.trim())
-  .then((user) => generateToken(user))
-  .then((token) => {
+  try {
+    validateString('username', username, { required: true });
+    validateString('password', password, { required: true });
+    const user = await createNewUser(username.trim(), password.trim());
+    const token = await generateToken(user);
     res.status(200).json({
       success: true,
       token,
     });
-  })
-  .catch((err) => {
+  } catch (err) {
     next(err);
-  });
+  }
 });
 
-userRouter.post('/login', (req, res, next) => {
+userRouter.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
-  validateString('username', username, { required: true });
-  validateString('password', password, { required: true });
-  login(username.trim(), password.trim())
-  .then((user) => generateToken(user))
-  .then((token) => {
+  try {
+    validateString('username', username, { required: true });
+    validateString('password', password, { required: true });
+    const user = await login(username.trim(), password.trim());
+    const token = await generateToken(user);
     res.status(200).json({
       success: true,
       token,
     });
-  })
-  .catch((err) => {
+  } catch (err) {
     next(err);
-  });
+  }
 });
 
-userRouter.get('/me', loginRequired, (req, res, next) => {
-  verifyToken(req.token)
-  .then((user) => {
+userRouter.get('/me', loginRequired, async (req, res, next) => {
+  try {
+    const user = await verifyToken(req.token);
     res.status(200).json(user);
-  })
-  .catch((err) => {
+  } catch (err) {
     next(err);
-  });
+  }
 });
 
 export default userRouter;
