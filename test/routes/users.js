@@ -1,6 +1,5 @@
 import { expect } from 'chai';
-import axios from 'axios';
-import { postWithError } from '../helper';
+import api from '../api';
 import { start, stop } from '../../src/server';
 import { port } from '../../src/core/config';
 import User from '../../src/models/User';
@@ -14,10 +13,9 @@ const host = `http://localhost:${port}`;
 describe('User route', () => {
   let token;
 
-  before(() => {
-    return start().then(() => {
-      return User.remove({});
-    });
+  before(async () => {
+    await start();
+    await User.remove({});
   });
 
   after(() => {
@@ -25,78 +23,92 @@ describe('User route', () => {
   });
 
   describe('GET /users', () => {
-    it('should get all users', () => {
-      return axios(`${host}/users`)
-      .then(({ data }) => {
-        expect(data.users).to.be.a('array');
-      });
+    it('should get all users', async () => {
+      const res = await api.get(`${host}/users`);
+      const data = await res.json();
+      expect(res.status).to.equal(200);
+      expect(data.users).to.be.a('array');
     });
   });
 
-  describe('POST /users/create', () => {
-    const url = `${host}/users/create`;
+  describe('POST /users/signup', () => {
+    const url = `${host}/users/signup`;
 
-    it('should create a new user', () => {
-      return axios.post(url, { username: 'x', password: '123' })
-      .then(({ data }) => {
-        expect(data.success).to.be.true;
-        expect(data.token).to.be.a('string');
+    it('should create a new user', async () => {
+      const res = await api.post(url, { username: 'x', password: '123' });
+      const data = await res.json();
+      expect(res.status).to.equal(200);
+      expect(data.success).to.be.true;
+      expect(data.token).to.be.a('string');
+    });
+
+    it('should get an empty field error', async () => {
+      const { status } = await api.post(url, {});
+      expect(status).to.equal(400);
+    });
+
+    it('should get an user exists error', async () => {
+      const { status } = await api.post(url, {
+        username: 'x',
+        password: '123',
       });
-    });
-
-    it('should get an empty field error', () => {
-      return postWithError(url, {}, 400);
-    });
-
-    it('should get an user exists error', () => {
-      return postWithError(url, { username: 'x', password: '123' }, 400);
+      expect(status).to.equal(400);
     });
   });
 
   describe('POST /users/login', () => {
     const url = `${host}/users/login`;
 
-    it('should login', () => {
-      return axios.post(url, { username: 'x', password: '123' })
-      .then(({ data }) => {
-        expect(data.success).to.be.true;
-        expect(data.token).to.be.a('string');
-        token = data.token;
+    it('should login', async () => {
+      const res = await api.post(url, {
+        username: 'x',
+        password: '123'
       });
+      const data = await res.json();
+      expect(res.status).to.equal(200);
+      expect(data.success).to.be.true;
+      expect(data.token).to.be.a('string');
+      token = data.token;
     });
 
-    it('should get an empty field error', () => {
-      return postWithError(url, {}, 400);
+    it('should get an empty field error', async () => {
+      const { status } = await api.post(url, {});
+      expect(status).to.equal(400);
     });
 
-    it('should get an user not exist error', () => {
-      return postWithError(url, { username: 'xxx', password: 'xxx' }, 400);
+    it('should get an user not exist error', async () => {
+      const { status } = await api.post(url, {
+        username: 'xxx',
+        password: 'xxx'
+      });
+      expect(status).to.equal(400);
     });
 
-    it('should get a password incorrect error', () => {
-      return postWithError(url, { username: 'x', password: 'xxx' }, 400);
+    it('should get a password incorrect error', async () => {
+      const { status } = await api.post(url, {
+        username: 'x',
+        password: 'xxx'
+      });
+      expect(status).to.equal(400);
     });
   });
 
   describe('GET /users/me', () => {
     const url = `${host}/users/me`;
 
-    it('should get an unauthorized error', () => {
-      return axios(url, {
-        validateStatus: null,
-      }).then(({ status, data }) => {
-        expect(status).to.equal(400);
-        expect(data.message).to.be.a('string');
-      });
+    it('should get an unauthorized error', async () => {
+      const res = await api.get(url);
+      const data = await res.json();
+      expect(res.status).to.equal(400);
+      expect(data.message).to.be.a('string');
     });
 
-    it('should get user infomation', () => {
-      return axios(url, {
-        headers: { authorization: `Bearer ${token}` },
+    it('should get user infomation', async () => {
+      const res = await api.get(url, {
+        authorization: `Bearer ${token}`,
       })
-      .then(({ data }) => {
-        expect(data.username).to.equal('x');
-      });
+      const data = await res.json();
+      expect(data.username).to.equal('x');
     });
   });
 });
