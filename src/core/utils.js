@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { Http400Error } from './error';
 
 export function validateString(fieldname, value, options = {}) {

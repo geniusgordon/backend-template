@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, import/prefer-default-export */
+
 function http400Handler(err, req, res, next) {
   res.status(400).json({ message: err.message });
 }
