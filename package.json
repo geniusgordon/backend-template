@@ -31,9 +31,9 @@
     "babel-preset-latest": "^6.16.0",
     "babel-preset-stage-0": "^6.5.0",
     "chai": "^3.5.0",
-    "eslint": "^3.8.0",
-    "eslint-config-airbnb-base": "^8.0.0",
-    "eslint-plugin-import": "^1.16.0",
+    "eslint": "^3.10.1",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.1.2",
     "nodemon": "^1.9.2"
   },
@@ -45,17 +45,8 @@
   },
   "eslintConfig": {
     "parser": "babel-eslint",
-    "extends": "airbnb",
+    "extends": "airbnb-base",
     "rules": {
-      "react/jsx-filename-extension": [
-        1,
-        {
-          "extensions": [
-            ".js",
-            ".jsx"
-          ]
-        }
-      ],
       "react/require-extension": "off",
       "import/no-extraneous-dependencies": [
         "error",

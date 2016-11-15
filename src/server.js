@@ -18,7 +18,7 @@ export function start() {
       server.on('error', (err) => {
         reject(err);
       });
-    })
+    }),
   );
 }
 
