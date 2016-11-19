@@ -1,8 +1,8 @@
-import { Http400Error } from '../core/error';
+import HttpError from '../core/error';
 
 export function loginRequired(req, res, next) {
   if (!req.token) {
-    next(new Http400Error('You are not authorized'));
+    next(new HttpError(400, 'You are not authorized'));
     return;
   }
   next();
@@ -17,7 +17,7 @@ export function bearerToken(req, res, next) {
 
   if (req.body && req.body.access_token) {
     if (token) {
-      throw new Http400Error('token should only be provided in one place');
+      throw new HttpError(400, 'token should only be provided in one place');
     }
     token = req.body.access_token;
   }
@@ -26,7 +26,7 @@ export function bearerToken(req, res, next) {
     const parts = req.headers.authorization.split(' ');
     if (parts.length === 2 && parts[0] === 'Bearer') {
       if (token) {
-        throw new Http400Error('token should only be provided in one place');
+        throw new HttpError(400, 'token should only be provided in one place');
       }
       token = parts[1];
     }

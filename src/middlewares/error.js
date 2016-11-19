@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars, import/prefer-default-export */
-
 function http400Handler(err, req, res, next) {
   res.status(400).json({ message: err.message });
 }
@@ -13,7 +11,7 @@ function http500Handler(err, req, res, next) {
   res.status(500).json(response);
 }
 
-export function errorHandler(err, req, res, next) {
+export default function errorHandler(err, req, res, next) {
   if (err.code === 400) {
     http400Handler(err, req, res, next);
   } else {

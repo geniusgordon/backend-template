@@ -1,9 +1,7 @@
-/* eslint-disable import/prefer-default-export */
-
-export class Http400Error extends Error {
-  constructor(...args) {
+export default class HttpError extends Error {
+  constructor(status, ...args) {
     super(...args);
-    this.code = 400;
+    this.status = status;
   }
 }
 

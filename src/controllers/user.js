@@ -1,5 +1,5 @@
 import User, { generateHash, validatePassword } from '../models/User';
-import { Http400Error } from '../core/error';
+import HttpError from '../core/error';
 
 export function getAllUsers() {
   return User.find({});
@@ -8,7 +8,7 @@ export function getAllUsers() {
 async function checkUserExist(username) {
   const user = await User.findOne({ username });
   if (user) {
-    throw new Http400Error(`user "${username}" exists`);
+    throw new HttpError(400, `user "${username}" exists`);
   }
 }
 
@@ -25,10 +25,10 @@ export async function createNewUser(username, password) {
 export async function login(username, password) {
   const user = await User.findOne({ username });
   if (!user) {
-    throw new Http400Error(`user "${username}" doesn't exist`);
+    throw new HttpError(400, `user "${username}" doesn't exist`);
   }
   if (!validatePassword(password, user.password)) {
-    throw new Http400Error('password incorrect');
+    throw new HttpError(400, 'password incorrect');
   }
   return user;
 }
