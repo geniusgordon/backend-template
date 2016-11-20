@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { bearerToken } from '../../src/middlewares/auth';
 
 describe('bearerToken', () => {
@@ -9,7 +8,7 @@ describe('bearerToken', () => {
       query: { access_token: token },
     };
     bearerToken(req, {}, () => {
-      expect(req.token).to.equal(token);
+      expect(req.token).toEqual(token);
       done();
     });
   });
@@ -19,7 +18,7 @@ describe('bearerToken', () => {
       body: { access_token: token },
     };
     bearerToken(req, {}, () => {
-      expect(req.token).to.equal(token);
+      expect(req.token).toEqual(token);
       done();
     });
   });
@@ -29,7 +28,7 @@ describe('bearerToken', () => {
       headers: { authorization: `Bearer ${token}` },
     };
     bearerToken(req, {}, () => {
-      expect(req.token).to.equal(token);
+      expect(req.token).toEqual(token);
       done();
     });
   });
@@ -42,7 +41,7 @@ describe('bearerToken', () => {
     };
     expect(() => {
       bearerToken(req, {}, () => {});
-    }).to.throw(Error);
+    }).toThrow();
   });
 });
 

@@ -1,17 +1,16 @@
 import fetch from 'isomorphic-fetch';
 
 function get(path, headers) {
-  return fetch(path, {
-    headers: Object.assign({}, headers),
-  });
+  return fetch(path, { headers });
 }
 
 function post(path, data, headers) {
   return fetch(path, {
     method: 'POST',
-    headers: Object.assign({}, {
+    headers: {
       'Content-Type': 'application/json',
-    }, headers),
+      ...headers,
+    },
     body: JSON.stringify(data),
   });
 }

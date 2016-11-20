@@ -4,38 +4,12 @@
   "description": "backend-template",
   "scripts": {
     "compile": "babel src -d dist",
-    "prestart": "npm run compile",
+    "prestart": "yarn run compile",
     "start": "node dist/server.js",
     "start:watch": "nodemon --exec babel-node src/server.js",
-    "test": "export NODE_ENV=test && mocha",
-    "posttest": "npm run lint",
+    "test": "export NODE_ENV=test && jest",
+    "posttest": "yarn run lint",
     "lint": "eslint ./src"
-  },
-  "dependencies": {
-    "axios": "^0.15.1",
-    "babel-polyfill": "^6.9.1",
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.15.1",
-    "chalk": "^1.1.3",
-    "connect-mongo": "^1.1.0",
-    "express": "^4.13.4",
-    "isomorphic-fetch": "^2.2.1",
-    "jsonwebtoken": "^7.1.9",
-    "mongoose": "^4.4.15",
-    "morgan": "^1.7.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.8.0",
-    "babel-core": "^6.8.0",
-    "babel-eslint": "^7.0.0",
-    "babel-preset-latest": "^6.16.0",
-    "babel-preset-stage-0": "^6.5.0",
-    "chai": "^3.5.0",
-    "eslint": "^3.10.1",
-    "eslint-config-airbnb-base": "^10.0.1",
-    "eslint-plugin-import": "^2.2.0",
-    "mocha": "^3.1.2",
-    "nodemon": "^1.9.2"
   },
   "babel": {
     "presets": [
@@ -55,5 +29,32 @@
         }
       ]
     }
+  },
+  "jest": {
+    "verbose": true
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.9.1",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.1",
+    "chalk": "^1.1.3",
+    "connect-mongo": "^1.1.0",
+    "express": "^4.13.4",
+    "isomorphic-fetch": "^2.2.1",
+    "jest": "^17.0.3",
+    "jsonwebtoken": "^7.1.9",
+    "mongoose": "^4.6.8",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "eslint": "^3.10.2",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "nodemon": "^1.9.2"
   }
 }
