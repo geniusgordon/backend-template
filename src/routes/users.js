@@ -7,14 +7,14 @@ import wrap from '../core/wrap';
 
 const userRouter = new Router();
 
-userRouter.get('/', wrap(async (req, res, next) => {
+userRouter.get('/', wrap(async (req, res) => {
   const users = await getAllUsers();
   res.status(200).json({
     users,
   });
 }));
 
-userRouter.post('/signup', wrap(async (req, res, next) => {
+userRouter.post('/signup', wrap(async (req, res) => {
   const { username, password } = req.body;
   validateString('username', username, { required: true });
   validateString('password', password, { required: true });
@@ -26,7 +26,7 @@ userRouter.post('/signup', wrap(async (req, res, next) => {
   });
 }));
 
-userRouter.post('/login', wrap(async (req, res, next) => {
+userRouter.post('/login', wrap(async (req, res) => {
   const { username, password } = req.body;
   validateString('username', username, { required: true });
   validateString('password', password, { required: true });
@@ -38,7 +38,7 @@ userRouter.post('/login', wrap(async (req, res, next) => {
   });
 }));
 
-userRouter.get('/me', loginRequired, wrap(async (req, res, next) => {
+userRouter.get('/me', loginRequired, wrap(async (req, res) => {
   const user = await verifyToken(req.token);
   res.status(200).json(user);
 }));

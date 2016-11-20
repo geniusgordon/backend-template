@@ -2,7 +2,7 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import { bearerToken } from '../middlewares/auth';
-import { errorHandler } from '../middlewares/error';
+import errorHandler from '../middlewares/error';
 import cors from '../middlewares/cors';
 import router from '../routes';
 

@@ -1,8 +1,4 @@
-function http400Handler(err, req, res, next) {
-  res.status(400).json({ message: err.message });
-}
-
-function http500Handler(err, req, res, next) {
+function http500Handler(err, req, res) {
   const response = process.env.NODE_ENV === 'production'
     ? { message: 'Something went wrong :(' } : {
       message: err.message,
@@ -12,8 +8,10 @@ function http500Handler(err, req, res, next) {
 }
 
 export default function errorHandler(err, req, res, next) {
-  if (err.code === 400) {
-    http400Handler(err, req, res, next);
+  if (err.status) {
+    res.status(err.status).json({
+      message: err.message,
+    });
   } else {
     http500Handler(err, req, res, next);
   }
